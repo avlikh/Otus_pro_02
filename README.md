@@ -7,7 +7,7 @@
 ### 1) Зайдите на OS, где установлен Ansible с root доступом
    - Примечание: используйте пользователя **root** либо команды: **su - root** либо **sudo -i**
 
-### 2) Выполните данную команду на удаленной машине:
+### 2) Выполните данную команду на удаленной машине (где развернут Ansible):
 ```
 apt update -y && apt install git -y ; git clone https://github.com/avlikh/Otus_pro_02.git /ansible;
 ```
@@ -24,7 +24,7 @@ export ANSIBLE_CONFIG=/ansible/ansible.cfg && cd /ansible/ && ansible-playbook /
 
 ### 1) Зайдите на OS, где будет развернут Ansible с root доступом
    - Примечание: используйте пользователя **root** либо команды: **su - root** либо **sudo -i**
-### 2) Выполните данную команду на удаленной машине:
+### 2) Выполните данную команду на удаленной машине (где будет развернут Ansible):
 ```
 apt update -y && apt install git -y ; git clone https://github.com/avlikh/Otus_pro_02.git /ansible; /ansible/install_andible_and_lesson2.ssh
 ```
