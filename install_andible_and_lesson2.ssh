@@ -1,0 +1,38 @@
+#!/bin/bash
+echo -e "Adding standard debian 12 repositories";
+cat > /etc/apt/sources.list <<EOF 
+
+#deb cdrom:[Debian GNU/Linux 12.5.0 _Bookworm_ - Official amd64 DVD Binary-1 with firmware 20240210-11:28]/ bookworm contrib main non-free-firmware
+#
+# From https://wiki.debian.org/SourcesList
+#
+deb http://deb.debian.org/debian bookworm main contrib non-free non-free-firmware
+deb-src http://deb.debian.org/debian bookworm main contrib non-free non-free-firmware
+#
+deb http://deb.debian.org/debian-security/ bookworm-security main contrib non-free non-free-firmware
+deb-src http://deb.debian.org/debian-security/ bookworm-security main contrib non-free non-free-firmware
+#
+deb http://deb.debian.org/debian bookworm-updates main contrib non-free non-free-firmware
+deb-src http://deb.debian.org/debian bookworm-updates main contrib non-free non-free-firmware
+#
+EOF
+echo -e "\033[0;32m Done!";
+
+echo -e "Update repositories and add basic utilities";
+apt-get -y update && apt-get -y upgrade && apt -y install mc htop iperf nfs-kernel-server telnet tree cifs-utils tcpdump sudo wget curl gnupg2 vim iftop chrony mtr
+echo -e "\033[0;32m Done!";
+
+echo -e "Fixing Debian vi/vim bugs";
+ln -s /etc/vim/vimrc ~/.vimrc
+echo -e "\033[0;32m Done!";
+
+echo -e "Installing Ansible...";
+apt -y install python3 ansible-core sshpass
+mkdir /ansible ; cd /ansible
+export ANSIBLE_CONFIG=/ansible/ansible.cfg
+
+echo -e "\033[0;32m Done!";
+
+echo -e "Running Ansible playbook";
+ansible-playbook /ansible/playbooks/playbook_update_debian12_kernel.yml -u root --ask-pass;
+echo -e "\033[0;32m Complete!";

@@ -1,0 +1,59 @@
+---
+- name   : playbook update Debian 12 Kernel
+  hosts  : testdeb1
+  become : yes
+ 
+  tasks  :
+
+  - name: copy sources.list
+    copy:
+      src   : /ansible/push/all/etc/apt/sources.list
+      dest  : /etc/apt/sources.list
+      owner : root
+      group : root
+      mode  : '0644'
+      backup: yes
+
+  - name: Get current kernel version
+    shell: uname -a
+    register: kernel_version_current
+
+  - name: Display kernel version
+    debug:
+      msg: "Current Linux kernel version is: {{ kernel_version_current.stdout }}"
+
+  - name: Update apt cache
+    ansible.builtin.apt:   
+      update_cache: yes
+
+  - name: Upgrade all packages
+    ansible.builtin.apt:
+      upgrade: dist
+
+  - name: Install latest kernel
+    ansible.builtin.apt:
+      name: linux-image-amd64
+      state: latest
+
+  - name: Reboot the server for kernel update
+    reboot:
+      msg: "Reboot initiated by Ansible for kernel update"
+
+  - name: waiting for server to come back 5 minutes, but only start checking after 10 seconds
+    wait_for_connection:
+      delay: 10
+      timeout: 300
+
+  - name: Get new kernel version
+    shell: uname -a
+    register: new_kernel_version
+
+  - name: Display old kernel version
+    debug:
+      msg: "Old Linux kernel version is: {{ kernel_version_current.stdout }}"
+
+  - name: Display new kernel version
+    debug:
+      msg: "New Linux kernel version is: {{ new_kernel_version.stdout }}"
+
+...
