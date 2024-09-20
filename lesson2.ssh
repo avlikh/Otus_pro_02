@@ -1,5 +1,6 @@
 #!/bin/bash
 export ANSIBLE_CONFIG=/ansible/ansible.cfg
 echo -e "Running Ansible playbook";
+cd /ansible
 ansible-playbook /ansible/playbooks/playbook_update_debian12_kernel.yml -u root --ask-pass;
 echo -e "\033[0;32m Complete!";
